@@ -12,7 +12,6 @@ install_requirements:
 streamlit:
 	-@streamlit run EDA_World_Happiness_Data.py
 
-
 # ----------------------------------
 #    LOCAL INSTALL COMMANDS
 # ----------------------------------
