@@ -10,7 +10,7 @@ install_requirements:
 # ----------------------------------
 
 streamlit:
-	-@streamlit run EDA_World_Happiness_Data.py
+	-@streamlit run EDA_Netflix_Data.py
 
 # ----------------------------------
 #    LOCAL INSTALL COMMANDS
