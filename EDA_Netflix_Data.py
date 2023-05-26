@@ -8,7 +8,7 @@
 
 
 """
-import pandas as pd
+import pandas as pd  # type: ignore
 import streamlit as st
 import numpy as np
 import seaborn as sns  # type: ignore
