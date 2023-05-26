@@ -37,5 +37,5 @@ jobs:
           black --check .
       - name: Run Mypy
         run: |
-          mypy EDA_World_Happiness_Data.py
+          mypy EDA_Netflix_Data.py
 
