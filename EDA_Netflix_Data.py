@@ -11,8 +11,8 @@
 import pandas as pd
 import streamlit as st
 import numpy as np
-import seaborn as sns #type: ignore
-import matplotlib.pyplot as plt #type: ignore
+import seaborn as sns  # type: ignore
+import matplotlib.pyplot as plt  # type: ignore
 import io
 
 st.set_option("deprecation.showPyplotGlobalUse", False)
@@ -66,7 +66,7 @@ with tab1:
     st.text(s)
 
     # Genre
-    st.write ('Nulls in column Genre: ',df['Genre'].isna().sum())
+    st.write("Nulls in column Genre: ", df["Genre"].isna().sum())
 
     # Duplicates
     st.header("Other Info")
@@ -110,7 +110,7 @@ with tab2:
 
     # Univariate Analysis: Categorical
     st.header("Categorical Variables")
-    #cat_cols = df.select_dtypes(include=["object"]).columns
+    # cat_cols = df.select_dtypes(include=["object"]).columns
     cat_cols = ["Series or Movie", "Runtime", "View Rating"]
     if len(cat_cols) == 1:
         fig, ax = plt.subplots(figsize=(10, 5))
