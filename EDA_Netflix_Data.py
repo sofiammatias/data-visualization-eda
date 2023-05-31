@@ -48,6 +48,25 @@ df = pd.read_csv(
     r"C:\Users\xufia\OneDrive\Documentos\Programação - Cursos\Projetos\data-visualization-eda\data-visualization-eda\netflix-rotten-tomatoes-metacritic-imdb.csv"
 )
 
+st.header ("Dashboard")
+# Define final dashboard
+with st.expander("Click to see the final dashboard"):
+    col1, col2 = st.columns([1, 3])
+
+    with col1:
+
+        labels = list(df['Series or Movie'].value_counts().index)
+        sizes = list(df['Series or Movie'].value_counts())
+
+        # Plot the pie chart
+        fig, ax = plt.subplots()
+        ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90)
+        ax.pie([100], radius=0.3, colors=['white'], startangle=90)
+        ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle
+
+        # Render the chart in Streamlit
+        st.pyplot(fig)
+
 # use tabs for different analysis
 tab1, tab2, tab3, tab4 = st.tabs(
     ["Initial Analysis", "Univariate Analysis", "Bivariate Analysis", "Correlations"]
@@ -65,18 +84,18 @@ with tab1:
     st.header("Columns Info")
     st.text(s)
 
-    # Genre
-    st.write("Nulls in column Genre: ", df["Genre"].isna().sum())
-
-    # Duplicates
     st.header("Other Info")
+    # Duplicates
     if int(df.duplicated().sum()) == 0:
         st.write("There are no duplicated rows.")
 
+    # Null values
     if int(df.isna().any().sum()) == 0:
         st.write("There are no missing values.")
     else:
-        st.write(f"There are {df.isna().any().sum()} missing values.")
+        st.write(f"There are {df.isna().any().sum()} variables with missing values.")
+        st.write(f"Average for {df.columns[13]} is {df[df.columns[13]].mean()}")
+    
 
 with tab2:
     # Univariate Analysis: Numerical
@@ -141,21 +160,22 @@ with tab2:
     # Separate columns with outliers
     out_cols = []
     for col in num_cols:
-        q1 = df[col].quantile(0.25)
-        q3 = df[col].quantile(0.75)
-        iqr = q3 - q1
-        lower_bound = q1 - 1.5 * iqr
-        upper_bound = q3 + 1.5 * iqr
-        outliers = df[(df[col] < lower_bound) | (df[col] > upper_bound)]
-        if not outliers.empty:
-            out_cols.append(col)
+        if abs(df[col].skew()) > 1.5:  # Check if the variable is highly skewed
+            q1 = df[col].quantile(0.25)
+            q3 = df[col].quantile(0.75)
+            iqr = q3 - q1
+            lower_bound = q1 - 1.5 * iqr
+            upper_bound = q3 + 1.5 * iqr
+            outliers = df[(df[col] < lower_bound) | (df[col] > upper_bound)]
+            if not outliers.empty:
+                out_cols.append(col)
 
     st.header("Outliers")
     num_rows = (len(out_cols) - 1) // 2 + 1
     fig, axs = plt.subplots(num_rows, 2, figsize=(10, 5 * num_rows))
     axs = axs.ravel()
 
-    for i, col in enumerate(num_cols):
+    for i, col in enumerate(out_cols):
         sns.boxplot(data=df[col], ax=axs[i])
         axs[i].set_title(f"{col}")
         axs[i].set_xlabel("")
