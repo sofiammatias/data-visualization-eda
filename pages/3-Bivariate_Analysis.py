@@ -49,32 +49,14 @@ def create_boxplot(df, col, ax):
     ax.set_ylabel(col)
 
 
-st.title("Exploratory Data Analysis: NetFlix Rotten Tomatoes Data 🍅")
+st.title("Bivariate Analysis: NetFlix Rotten Tomatoes Data 🍅")
 
 # Load the csv file
 df = pd.read_csv(
     r"C:\Users\xufia\OneDrive\Documentos\Programação - Cursos\Projetos\data-visualization-eda\data-visualization-eda\netflix-rotten-tomatoes-metacritic-imdb.csv"
 )
 
-tab1, tab2 = st.tabs(["Introduction", "Final Dashboard"])
-
-with tab1:
-    st.write("Write an explanation to this analysis")
-
-with tab2:
-    st.header ("Dashboard")
-    col1, col2 = st.columns([1, 3])
-
-    with col1:
-
-        labels = list(df['Series or Movie'].value_counts().index)
-        sizes = list(df['Series or Movie'].value_counts())
-        
-        # Plot the pie chart
-        fig, ax = plt.subplots()
-        ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90)
-        ax.pie([100], radius=0.3, colors=['white'], startangle=90)
-        ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle
-
-        # Render the chart in Streamlit
-        st.pyplot(fig)
+# Bivariate Analysis
+st.header("Bivariate Analysis")
+sns.pairplot(df)
+st.pyplot()

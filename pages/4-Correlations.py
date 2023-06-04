@@ -17,7 +17,7 @@ import io
 
 # Configurations
 #st.set_option("deprecation.showPyplotGlobalUse", False)
-st.set_page_config(layout="wide",page_title="NetFlix Rotten Tomatoes Data - EDA", page_icon = "🍅")
+st.set_page_config(layout="wide", page_title="NetFlix Rotten Tomatoes Data - EDA", page_icon = "🍅")
 hide_default_format = """
        <style>
        #MainMenu {visibility: hidden; }
@@ -49,32 +49,18 @@ def create_boxplot(df, col, ax):
     ax.set_ylabel(col)
 
 
-st.title("Exploratory Data Analysis: NetFlix Rotten Tomatoes Data 🍅")
+st.title("Bivariate Analysis: NetFlix Rotten Tomatoes Data 🍅")
 
 # Load the csv file
 df = pd.read_csv(
     r"C:\Users\xufia\OneDrive\Documentos\Programação - Cursos\Projetos\data-visualization-eda\data-visualization-eda\netflix-rotten-tomatoes-metacritic-imdb.csv"
 )
 
-tab1, tab2 = st.tabs(["Introduction", "Final Dashboard"])
-
-with tab1:
-    st.write("Write an explanation to this analysis")
-
-with tab2:
-    st.header ("Dashboard")
-    col1, col2 = st.columns([1, 3])
-
-    with col1:
-
-        labels = list(df['Series or Movie'].value_counts().index)
-        sizes = list(df['Series or Movie'].value_counts())
-        
-        # Plot the pie chart
-        fig, ax = plt.subplots()
-        ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90)
-        ax.pie([100], radius=0.3, colors=['white'], startangle=90)
-        ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle
-
-        # Render the chart in Streamlit
-        st.pyplot(fig)
+# Pearson Correlation Heatmap
+st.header("Pearson Correlation Heatmap")
+corr = df.corr()
+mask = np.zeros_like(corr, dtype=bool)
+mask[np.triu_indices_from(mask)] = True
+cmap = sns.diverging_palette(220, 10, as_cmap=True)
+sns.heatmap(corr, mask=mask, cmap=cmap, square=True, annot=True, fmt=".2f")
+st.pyplot()
