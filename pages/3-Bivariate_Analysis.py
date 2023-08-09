@@ -1,11 +1,6 @@
 """
     Conducting EDA:
-    - Initial Data Exploration: Read in data, take a glimpse at a few rows, calculate some summary statistics.
-    - Univariate Analysis: Analyze continuous and categorical variables, one variable at a time.
     - Bivariate Analysis: Looking at the relationship between two variables at a time.
-    - Identify and Handling Duplicate and Missing Data: Find and remove duplicate rows, and replace missing values with their mean and mode.
-    - Correlation Analysis: Looking at the correlation of numerical variables in the dataset and interpreting the numbers.
-
 
 """
 import pandas as pd  # type: ignore
@@ -57,6 +52,6 @@ df = pd.read_csv(
 )
 
 # Bivariate Analysis
-st.header("Bivariate Analysis")
+st.header("Potential Correlations Between 2 Variables")
 sns.pairplot(df)
 st.pyplot()

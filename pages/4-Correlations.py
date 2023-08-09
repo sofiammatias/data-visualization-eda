@@ -1,12 +1,6 @@
 """
     Conducting EDA:
-    - Initial Data Exploration: Read in data, take a glimpse at a few rows, calculate some summary statistics.
-    - Univariate Analysis: Analyze continuous and categorical variables, one variable at a time.
-    - Bivariate Analysis: Looking at the relationship between two variables at a time.
-    - Identify and Handling Duplicate and Missing Data: Find and remove duplicate rows, and replace missing values with their mean and mode.
     - Correlation Analysis: Looking at the correlation of numerical variables in the dataset and interpreting the numbers.
-
-
 """
 import pandas as pd  # type: ignore
 import streamlit as st
@@ -49,7 +43,7 @@ def create_boxplot(df, col, ax):
     ax.set_ylabel(col)
 
 
-st.title("Bivariate Analysis: NetFlix Rotten Tomatoes Data 🍅")
+st.title("Correlations: NetFlix Rotten Tomatoes Data 🍅")
 
 # Load the csv file
 df = pd.read_csv(
@@ -59,8 +53,6 @@ df = pd.read_csv(
 # Pearson Correlation Heatmap
 st.header("Pearson Correlation Heatmap")
 corr = df.corr()
-mask = np.zeros_like(corr, dtype=bool)
-mask[np.triu_indices_from(mask)] = True
 cmap = sns.diverging_palette(220, 10, as_cmap=True)
-sns.heatmap(corr, mask=mask, cmap=cmap, square=True, annot=True, fmt=".2f")
+sns.heatmap(corr, cmap=cmap, square=True, annot=True, fmt=".2f")
 st.pyplot()

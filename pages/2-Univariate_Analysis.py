@@ -1,12 +1,6 @@
 """
     Conducting EDA:
-    - Initial Data Exploration: Read in data, take a glimpse at a few rows, calculate some summary statistics.
     - Univariate Analysis: Analyze continuous and categorical variables, one variable at a time.
-    - Bivariate Analysis: Looking at the relationship between two variables at a time.
-    - Identify and Handling Duplicate and Missing Data: Find and remove duplicate rows, and replace missing values with their mean and mode.
-    - Correlation Analysis: Looking at the correlation of numerical variables in the dataset and interpreting the numbers.
-
-
 """
 import pandas as pd  # type: ignore
 import streamlit as st
@@ -56,9 +50,16 @@ df = pd.read_csv(
     r"C:\Users\xufia\OneDrive\Documentos\Programação - Cursos\Projetos\data-visualization-eda\data-visualization-eda\netflix-rotten-tomatoes-metacritic-imdb.csv"
 )
 
+# Extract unique genres
+unique_genres = set(genre for genres in df["Genre"].str.split(", ").dropna() for genre in genres)
+
+# Create one-hot encoded columns for genres
+for genre in unique_genres:
+    df[f"Genre-{genre}"] = df["Genre"].dropna().str.contains(genre).astype(bool)
+
 # Univariate Analysis: Numerical
 st.header("Numerical Variables")
-num_cols = df.select_dtypes(include=["float64", "int64"]).columns
+num_cols = df.select_dtypes(include=["float64"]).columns
 if len(num_cols) == 1:
     fig, ax = plt.subplots(figsize=(10, 5))
     sns.histplot(data=df, x=num_cols, ax=ax)
@@ -88,7 +89,7 @@ elif len(num_cols) > 2:
 # Univariate Analysis: Categorical
 st.header("Categorical Variables")
 # cat_cols = df.select_dtypes(include=["object"]).columns
-cat_cols = ["Series or Movie", "Runtime", "View Rating"]
+cat_cols = ["Series or Movie", "Runtime", "View Rating", "Genre"]
 if len(cat_cols) == 1:
     fig, ax = plt.subplots(figsize=(10, 5))
     create_countplot(df, cat_cols[0], ax)
@@ -100,17 +101,22 @@ elif len(cat_cols) == 2:
     create_countplot(df, cat_cols[1], ax2)
     st.columns([ax1, ax2])
 elif len(cat_cols) > 2:
-    num_rows = (len(cat_cols) - 1) // 3 + 1
-    fig, axs = plt.subplots(num_rows, 3, figsize=(15, 5 * num_rows))
+    num_rows = (len(cat_cols) - 1) // 2 + 1
+    fig, axs = plt.subplots(num_rows, 2, figsize=(15, 5 * num_rows))
     axs = axs.ravel()
     for i, col in enumerate(cat_cols):
-        sns.countplot(data=df, x=col, ax=axs[i])
+        unique_vals = df[col].unique()
+        if col == 'Genre':
+            sizes = []
+            for genre in unique_genres:
+                sizes.append (sum(df[f"Genre-{genre}"].dropna()))
+            labels = list(unique_genres)
+            sns.barplot (x=labels, y=sizes, ax=axs[i])
+        else:
+            sns.countplot(data=df, x=col, ax=axs[i])
         axs[i].set_xlabel(col)
         axs[i].set_ylabel("Count")
-        axs[i].tick_params(axis="x", labelrotation=45, labelsize=8)
-        axs[i].set_xticklabels([])
-        handles, labels = axs[i].get_legend_handles_labels()
-        axs[i].legend(handles, labels, loc="best")
+        axs[i].tick_params(axis="x", labelrotation=90, labelsize=8)
     fig.tight_layout()
     st.pyplot(fig)
 

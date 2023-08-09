@@ -13,6 +13,7 @@ import streamlit as st
 import numpy as np
 import seaborn as sns  # type: ignore
 import matplotlib.pyplot as plt  # type: ignore
+import altair as alt # type: ignore
 import io
 
 # Configurations
@@ -29,24 +30,22 @@ st.markdown(hide_default_format, unsafe_allow_html=True)
 @st.cache_resource
 @st.cache_data
 
-# Define function to create a countplot
-def create_countplot(df, col, ax):
-    """Function to create a countplot"""
-    sns.countplot(data=df, x=col, ax=ax)
-    ax.set_xlabel(col)
-    ax.set_ylabel("Count")
-    ax.tick_params(axis="x", labelrotation=45, labelsize=8)
-    ax.set_xticklabels([])
-    handles, labels = ax.get_legend_handles_labels()
-    ax.legend(handles, labels, loc="best")
-
-
-# Define function to create a boxplot
-def create_boxplot(df, col, ax):
-    """Function to create a boxplot"""
-    sns.boxplot(data=df, y=col, ax=ax)
-    ax.set_xlabel("")
-    ax.set_ylabel(col)
+# Function to plot a bar chart
+def plot_bar_chart(column_name, score_column, top_n=10):
+    plt.figure(figsize=(10, 6))
+    
+    if column_name in ["Director", "Writer"]:
+        top_values = df[column_name].value_counts().head(top_n).index
+        filtered_df = df[df[column_name].isin(top_values)]
+        sns.barplot(data=filtered_df, x=column_name, y=score_column, ci=None)
+    else:
+        sns.barplot(data=df, x=column_name, y=score_column, ci=None)
+    
+    plt.title(f"Average {score_column} by {column_name}")
+    plt.xticks(rotation=45, ha='right')
+    plt.xlabel(column_name)
+    plt.ylabel(f"Average {score_column}")
+    plt.tight_layout()
 
 
 st.title("Exploratory Data Analysis: NetFlix Rotten Tomatoes Data 🍅")
@@ -56,25 +55,100 @@ df = pd.read_csv(
     r"C:\Users\xufia\OneDrive\Documentos\Programação - Cursos\Projetos\data-visualization-eda\data-visualization-eda\netflix-rotten-tomatoes-metacritic-imdb.csv"
 )
 
+# Extract unique genres
+unique_genres = set(genre for genres in df["Genre"].str.split(", ").dropna() for genre in genres)
+
+# Create one-hot encoded columns for genres
+for genre in unique_genres:
+    df[f"Genre-{genre}"] = df["Genre"].dropna().str.contains(genre).astype(bool)
+
 tab1, tab2 = st.tabs(["Introduction", "Final Dashboard"])
 
 with tab1:
-    st.write("Write an explanation to this analysis")
+    """Given the Netflix Rotten Tomatoes dataset, this app shows an automatic Exploratory Data Analysis, covering:
+- an initial analysis (columns number, columns title, columns data type, rows number, duplicated data, missing/null data)
+- data histograms to numerical variables
+- distribution of categorical variables
+- bivariate analysis: blind correlation of all numerical variables
+- Pearson correlation to the most relevant numerical values: scores, awards and votes"""
 
 with tab2:
-    st.header ("Dashboard")
-    col1, col2 = st.columns([1, 3])
+    st.title ("Totals")
 
-    with col1:
+    # Pie charts
+    col1, col2, col3 = st.columns(3) #[1,3] allows to uneven the column width
+    cols = [col1, col2, col3]
 
-        labels = list(df['Series or Movie'].value_counts().index)
-        sizes = list(df['Series or Movie'].value_counts())
+    for i, col in enumerate(['Series or Movie', 'Runtime', 'View Rating']):
+        top_n = 8
+        labels = list(df[col].value_counts().index)[:top_n]
+        sizes = list(df[col].value_counts())[:top_n]
         
-        # Plot the pie chart
-        fig, ax = plt.subplots()
-        ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90)
-        ax.pie([100], radius=0.3, colors=['white'], startangle=90)
-        ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle
+        with cols[i]:
+            # Plot "Series or Movie" pie chart
+            fig, ax = plt.subplots()
+            ax.pie(sizes, labels=labels, startangle=90)
+            ax.pie([100], radius=0.3, colors=['white'], startangle=90)
+            ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle
 
-        # Render the chart in Streamlit
-        st.pyplot(fig)
+            st.pyplot(fig)
+
+    sizes = []
+    for genre in unique_genres:
+        sizes.append (sum(df[f"Genre-{genre}"].dropna()))
+    labels = list(unique_genres)
+    df_aux = pd.DataFrame([sizes, labels]).T
+    df_aux.columns=['Count', 'Genre']
+    df_aux.sort_values('Count', ascending=False, inplace=True)
+
+    # "Genre" bar chart
+    fig2, ax = plt.subplots(figsize=(10,6))
+    sns.barplot(data=df_aux, x="Count", y="Genre", ax=ax)
+
+    st.pyplot(fig2)
+
+    # Bar charts for scores
+    st.title ("Scores")
+
+    # Lists: columns to consider and scores
+    col = ["Series or Movie", "Genre", "View Rating", "Runtime", "Director", "Writer"]
+    scores = ["Hidden Gem Score", "IMDb Score", "Rotten Tomatoes Score", "Metacritic Score"]
+
+    # Display settings
+    num_rows = 2
+    num_cols = 3
+    fig, axs = plt.subplots(num_rows, num_cols, figsize=(15, 10))
+    axs = axs.ravel()
+
+    # Display score select control
+    selected_score = st.selectbox('Select one score metric:', scores, index = 2)
+
+    # Loop through the columns and create bar charts for each score
+    for i, column in enumerate(col):
+        if column in ["Director", "Writer"]:
+            top_n = 10
+            df_aux1=df.groupby(column)[selected_score].agg(['count', 'mean'])
+            df_aux1.sort_values(by='count', ascending=False, inplace=True)
+            value_counts = df_aux1[:top_n]
+            sns.barplot(data=value_counts, x=value_counts.index, y=value_counts['mean'], ax=axs[i])
+            axs[i].set_title(f"Top {top_n} {column}")
+            axs[i].set_xticklabels(value_counts.index, rotation=45, ha="right")
+        elif column == "Genre":
+            sizes = []
+            for genre in unique_genres:
+                sizes.append (df[df[f"Genre-{genre}"] == True][selected_score].mean())
+            labels = list(unique_genres)
+            sns.barplot (x=labels, y=sizes, ax=axs[i])
+            axs[i].set_title(f"{column} vs {selected_score}")
+        else:
+            sns.barplot(data=df, x=column, y=selected_score, ax=axs[i])
+            axs[i].set_title(f"{column} vs {selected_score}")
+            axs[i].set_xticklabels(axs[i].get_xticklabels(), rotation=90, ha="right")
+
+        axs[i].set_ylabel(selected_score)
+        axs[i].set_xlabel(column)
+        axs[i].tick_params(axis="x", labelrotation=90)
+
+    # Adjust layout and display
+    plt.tight_layout()
+    st.pyplot(fig)

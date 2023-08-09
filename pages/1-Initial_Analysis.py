@@ -1,3 +1,8 @@
+"""
+    Conducting EDA:
+    - Initial Data Exploration: Read in data, take a glimpse at a few rows, calculate some summary statistics.
+"""
+
 import pandas as pd  # type: ignore
 import streamlit as st
 import numpy as np
