@@ -11,8 +11,12 @@ import matplotlib.pyplot as plt  # type: ignore
 import io
 
 # Configurations
-#st.set_option("deprecation.showPyplotGlobalUse", False)
-st.set_page_config(layout="wide", page_title="NetFlix Rotten Tomatoes Data - Initial Analysis", page_icon = "📋")
+# st.set_option("deprecation.showPyplotGlobalUse", False)
+st.set_page_config(
+    layout="wide",
+    page_title="NetFlix Rotten Tomatoes Data - Initial Analysis",
+    page_icon="📋",
+)
 hide_default_format = """
        <style>
        #MainMenu {visibility: hidden; }
@@ -20,6 +24,7 @@ hide_default_format = """
        </style>
        """
 st.markdown(hide_default_format, unsafe_allow_html=True)
+
 
 @st.cache_resource
 @st.cache_data
@@ -74,4 +79,3 @@ if int(df.isna().any().sum()) == 0:
 else:
     st.write(f"There are {df.isna().any().sum()} variables with missing values.")
     st.write(f"Average for {df.columns[13]} is {df[df.columns[13]].mean()}")
-    

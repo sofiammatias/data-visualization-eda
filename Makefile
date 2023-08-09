@@ -13,16 +13,14 @@ streamlit:
 	-@streamlit run EDA_Netflix_Data.py
 
 # ----------------------------------
-#    LOCAL INSTALL COMMANDS
+#    LOCAL CLEAN COMMANDS
 # ----------------------------------
-install:
-	@pip install . -U
 
-clean:
-	@rm -fr */__pycache__
-	@rm -fr __init__.py
-	@rm -fr build
-	@rm -fr dist
-	@rm -fr *.dist-info
-	@rm -fr *.egg-info
-	-@rm model.joblib
+check_black:
+	@black --check .
+
+black:
+	@black .
+
+my_py:
+	@mypy EDA_Netflix_Data.py

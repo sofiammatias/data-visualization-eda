@@ -10,8 +10,10 @@ import matplotlib.pyplot as plt  # type: ignore
 import io
 
 # Configurations
-#st.set_option("deprecation.showPyplotGlobalUse", False)
-st.set_page_config(layout="wide",page_title="NetFlix Rotten Tomatoes Data - EDA", page_icon = "🍅")
+# st.set_option("deprecation.showPyplotGlobalUse", False)
+st.set_page_config(
+    layout="wide", page_title="NetFlix Rotten Tomatoes Data - EDA", page_icon="🍅"
+)
 hide_default_format = """
        <style>
        #MainMenu {visibility: hidden; }
@@ -19,6 +21,7 @@ hide_default_format = """
        </style>
        """
 st.markdown(hide_default_format, unsafe_allow_html=True)
+
 
 @st.cache_resource
 @st.cache_data
@@ -51,7 +54,9 @@ df = pd.read_csv(
 )
 
 # Extract unique genres
-unique_genres = set(genre for genres in df["Genre"].str.split(", ").dropna() for genre in genres)
+unique_genres = set(
+    genre for genres in df["Genre"].str.split(", ").dropna() for genre in genres
+)
 
 # Create one-hot encoded columns for genres
 for genre in unique_genres:
@@ -106,12 +111,12 @@ elif len(cat_cols) > 2:
     axs = axs.ravel()
     for i, col in enumerate(cat_cols):
         unique_vals = df[col].unique()
-        if col == 'Genre':
+        if col == "Genre":
             sizes = []
             for genre in unique_genres:
-                sizes.append (sum(df[f"Genre-{genre}"].dropna()))
+                sizes.append(sum(df[f"Genre-{genre}"].dropna()))
             labels = list(unique_genres)
-            sns.barplot (x=labels, y=sizes, ax=axs[i])
+            sns.barplot(x=labels, y=sizes, ax=axs[i])
         else:
             sns.countplot(data=df, x=col, ax=axs[i])
         axs[i].set_xlabel(col)
@@ -152,4 +157,3 @@ if len(out_cols) % 2 != 0:
     fig.delaxes(axs[-1])
 fig.tight_layout()
 st.pyplot(fig)
-

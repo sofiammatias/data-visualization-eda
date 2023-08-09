@@ -11,8 +11,10 @@ import matplotlib.pyplot as plt  # type: ignore
 import io
 
 # Configurations
-#st.set_option("deprecation.showPyplotGlobalUse", False)
-st.set_page_config(layout="wide",page_title="NetFlix Rotten Tomatoes Data - EDA", page_icon = "🍅")
+# st.set_option("deprecation.showPyplotGlobalUse", False)
+st.set_page_config(
+    layout="wide", page_title="NetFlix Rotten Tomatoes Data - EDA", page_icon="🍅"
+)
 hide_default_format = """
        <style>
        #MainMenu {visibility: hidden; }
@@ -20,6 +22,7 @@ hide_default_format = """
        </style>
        """
 st.markdown(hide_default_format, unsafe_allow_html=True)
+
 
 @st.cache_resource
 @st.cache_data
