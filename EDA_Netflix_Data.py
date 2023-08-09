@@ -13,8 +13,6 @@ import streamlit as st
 import numpy as np
 import seaborn as sns  # type: ignore
 import matplotlib.pyplot as plt  # type: ignore
-import altair as alt # type: ignore
-import io
 
 # Configurations
 #st.set_option("deprecation.showPyplotGlobalUse", False)
