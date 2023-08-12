@@ -52,9 +52,7 @@ def plot_bar_chart(column_name, score_column, top_n=10):
 st.title("Exploratory Data Analysis: NetFlix Rotten Tomatoes Data 🍅")
 
 # Load the csv file
-df = pd.read_csv(
-    r"C:\Users\xufia\OneDrive\Documentos\Programação - Cursos\Projetos\data-visualization-eda\data-visualization-eda\netflix-rotten-tomatoes-metacritic-imdb.csv"
-)
+df = pd.read_csv(r"netflix-rotten-tomatoes-metacritic-imdb.csv")
 
 # Extract unique genres
 unique_genres = set(
@@ -73,7 +71,8 @@ with tab1:
     - data histograms to numerical variables
     - distribution of categorical variables
     - bivariate analysis: blind correlation of all numerical variables
-    - Pearson correlation to the most relevant numerical values: scores, awards and votes"""
+    - Pearson correlation to the most relevant numerical values: scores, awards and votes
+    """
 
 with tab2:
     st.title("Totals")
