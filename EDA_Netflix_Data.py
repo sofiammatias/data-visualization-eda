@@ -67,11 +67,11 @@ tab1, tab2 = st.tabs(["Introduction", "Final Dashboard"])
 
 with tab1:
     """Given the Netflix Rotten Tomatoes dataset, this app shows an automatic Exploratory Data Analysis, covering:
-    - an initial analysis (columns number, columns title, columns data type, rows number, duplicated data, missing/null data)
-    - data histograms to numerical variables
-    - distribution of categorical variables
-    - bivariate analysis: blind correlation of all numerical variables
-    - Pearson correlation to the most relevant numerical values: scores, awards and votes
+- an initial analysis (columns number, columns title, columns data type, rows number, duplicated data, missing/null data)
+- data histograms to numerical variables
+- distribution of categorical variables
+- bivariate analysis: blind correlation of all numerical variables
+- Pearson correlation to the most relevant numerical values: scores, awards and votes
     """
 
 with tab2:
