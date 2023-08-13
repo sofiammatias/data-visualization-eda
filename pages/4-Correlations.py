@@ -49,9 +49,8 @@ def create_boxplot(df, col, ax):
 st.title("Correlations: NetFlix Rotten Tomatoes Data 🍅")
 
 # Load the csv file
-df = pd.read_csv(
-    r"C:\Users\xufia\OneDrive\Documentos\Programação - Cursos\Projetos\data-visualization-eda\data-visualization-eda\netflix-rotten-tomatoes-metacritic-imdb.csv"
-)
+df = pd.read_csv(r"netflix-rotten-tomatoes-metacritic-imdb.csv")
+
 
 # Pearson Correlation Heatmap
 st.header("Pearson Correlation Heatmap")
