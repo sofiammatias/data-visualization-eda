@@ -13,5 +13,5 @@ This data analysis project shows:
 
 Checkout how it all works at [the website app](https://data-visualization-eda-netflix.streamlit.app/).
 
-<img width="957" alt="image" src="https://github.com/sofiammatias/data-visualization-eda/assets/114782592/b6f1e5be-c274-404f-975d-676a1c754e45">(https://data-visualization-eda-netflix.streamlit.app/)
+<a href="https://data-visualization-eda-netflix.streamlit.app/"><img width="957" alt="image" src="https://github.com/sofiammatias/data-visualization-eda/assets/114782592/b6f1e5be-c274-404f-975d-676a1c754e45"></a>
 
