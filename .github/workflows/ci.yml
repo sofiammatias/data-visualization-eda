@@ -28,13 +28,13 @@ jobs:
       # Runs a single command using the runners shell
       - name: Install dependencies
         run: |
-          pip install poetry==1.7.1
-          poetry config virtualenvs.in-project true
-          poetry install
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install black==22.6.0 
+          pip install mypy
       - name: Run black
         run:
           black --check .
       - name: Run Mypy
         run: |
           mypy EDA_Netflix_Data.py
-
