@@ -38,3 +38,9 @@ jobs:
       - name: Run Mypy
         run: |
           mypy EDA_Netflix_Data.py
+          cd pages
+          mypy 1-Initial_Analysis.py
+          mypy 2-Univariate_Analysis.py
+          mypy 3-Bivariate_Analysis.py
+          mypy 4-Correlations.py
+
