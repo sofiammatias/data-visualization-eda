@@ -48,7 +48,7 @@ def create_boxplot(df, col, ax):
 st.title("Univariate Analysis: NetFlix Rotten Tomatoes Data 🍅")
 
 # Load the csv file
-df = pd.read_csv(r"netflix-rotten-tomatoes-metacritic-imdb.csv")
+df = pd.read_csv(r"..\data-visualization-eda\netflix-rotten-tomatoes-metacritic-imdb.csv")
 
 
 # Extract unique genres

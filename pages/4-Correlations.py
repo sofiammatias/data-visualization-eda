@@ -4,10 +4,8 @@
 """
 import pandas as pd  # type: ignore
 import streamlit as st
-import numpy as np
 import seaborn as sns  # type: ignore
-import matplotlib.pyplot as plt  # type: ignore
-import io
+import matplotlib.pyplot as plt
 
 # Configurations
 # st.set_option("deprecation.showPyplotGlobalUse", False)
@@ -38,22 +36,15 @@ def create_countplot(df, col, ax):
     ax.legend(handles, labels, loc="best")
 
 
-# Define function to create a boxplot
-def create_boxplot(df, col, ax):
-    """Function to create a boxplot"""
-    sns.boxplot(data=df, y=col, ax=ax)
-    ax.set_xlabel("")
-    ax.set_ylabel(col)
-
-
 st.title("Correlations: NetFlix Rotten Tomatoes Data 🍅")
 
 # Load the csv file
-df = pd.read_csv(r"..\netflix-rotten-tomatoes-metacritic-imdb.csv")
+df = pd.read_csv(r"..\data-visualization-eda\netflix-rotten-tomatoes-metacritic-imdb.csv")
 
 # Pearson Correlation Heatmap
 st.header("Pearson Correlation Heatmap")
+plt.clf()
 corr = df.corr(numeric_only=True)
 cmap = sns.diverging_palette(220, 10, as_cmap=True)
-hm = sns.heatmap(corr, cmap=cmap, square=True, annot=True, fmt=".2f")
+hm = sns.heatmap(corr, cmap=cmap, annot=True, fmt=".2f")
 st.pyplot(hm.figure)

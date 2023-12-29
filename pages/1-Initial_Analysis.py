@@ -7,7 +7,6 @@ import pandas as pd  # type: ignore
 import streamlit as st
 import numpy as np
 import seaborn as sns  # type: ignore
-import matplotlib.pyplot as plt  # type: ignore
 import io
 
 # Configurations
@@ -41,19 +40,11 @@ def create_countplot(df, col, ax):
     ax.legend(handles, labels, loc="best")
 
 
-# Define function to create a boxplot
-def create_boxplot(df, col, ax):
-    """Function to create a boxplot"""
-    sns.boxplot(data=df, y=col, ax=ax)
-    ax.set_xlabel("")
-    ax.set_ylabel(col)
-
-
 st.title("Initial Analysis: NetFlix Rotten Tomatoes Data 🍅")
 
 
 # Load the csv file
-df = pd.read_csv(r"netflix-rotten-tomatoes-metacritic-imdb.csv")
+df = pd.read_csv(r"..\data-visualization-eda\netflix-rotten-tomatoes-metacritic-imdb.csv")
 
 
 # Seeing dataframe
