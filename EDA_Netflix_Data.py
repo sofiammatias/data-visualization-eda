@@ -53,6 +53,10 @@ st.title("Exploratory Data Analysis: NetFlix Rotten Tomatoes Data 🍅")
 # Load the csv file
 df = pd.read_csv(r"netflix-rotten-tomatoes-metacritic-imdb.csv")
 
+# Save the dataframe in session state to be used by other pages
+if 'df' not in st.session_state:
+    st.session_state['df'] = df
+
 # Extract unique genres
 unique_genres = set(
     genre for genres in df["Genre"].str.split(", ").dropna() for genre in genres

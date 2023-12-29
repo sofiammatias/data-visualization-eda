@@ -38,8 +38,8 @@ def create_countplot(df, col, ax):
 
 st.title("Correlations: NetFlix Rotten Tomatoes Data 🍅")
 
-# Load the csv file
-df = pd.read_csv(r"..\data-visualization-eda\netflix-rotten-tomatoes-metacritic-imdb.csv")
+# Load the dataframe
+df = st.session_state.df
 
 # Pearson Correlation Heatmap
 st.header("Pearson Correlation Heatmap")

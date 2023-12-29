@@ -49,8 +49,8 @@ def create_boxplot(df, col, ax):
 
 st.title("Bivariate Analysis: NetFlix Rotten Tomatoes Data 🍅")
 
-# Load the csv file
-df = pd.read_csv(r"netflix-rotten-tomatoes-metacritic-imdb.csv")
+# Load the dataframe
+df = st.session_state.df
 
 # Bivariate Analysis
 st.header("Potential Correlations Between 2 Variables")
