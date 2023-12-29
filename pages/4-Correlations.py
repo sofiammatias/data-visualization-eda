@@ -49,12 +49,11 @@ def create_boxplot(df, col, ax):
 st.title("Correlations: NetFlix Rotten Tomatoes Data 🍅")
 
 # Load the csv file
-df = pd.read_csv(r"netflix-rotten-tomatoes-metacritic-imdb.csv")
-
+df = pd.read_csv(r"..\netflix-rotten-tomatoes-metacritic-imdb.csv")
 
 # Pearson Correlation Heatmap
 st.header("Pearson Correlation Heatmap")
-corr = df.corr()
+corr = df.corr(numeric_only=True)
 cmap = sns.diverging_palette(220, 10, as_cmap=True)
-sns.heatmap(corr, cmap=cmap, square=True, annot=True, fmt=".2f")
-st.pyplot()
+hm = sns.heatmap(corr, cmap=cmap, square=True, annot=True, fmt=".2f")
+st.pyplot(hm.figure)
